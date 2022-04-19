@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': 'test',
         'USER': 'root',
         'PASSWORD': 'redhat.com',
-        'HOST': '172.17.0.1',
+        'HOST': '10.0.4.9',
         'PORT': '3306',
     }
 }

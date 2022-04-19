@@ -28,3 +28,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
 ]
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+# ... the rest of your URLconf goes here ...
+
+urlpatterns += staticfiles_urlpatterns()
