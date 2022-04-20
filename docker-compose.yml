@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=redhat"
+      - "MYSQL_ROOT_HOST=%"
+      - "MYSQL_DATABASE=test"
+    networks:
+      - test_net
+    volumes:
+      - /root/mysql_data:/var/lib/mysql
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - ./deploy/django.env
+    ports:
+      - "80:8000"
+    networks:
+      - test_net
+    restart: always
+    depends_on:
+      - db
+
+networks:
+  test_net:
