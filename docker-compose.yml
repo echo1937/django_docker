@@ -13,12 +13,12 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     networks:
-      - test_net
+      - web_net
     volumes:
       - /root/mysql_data:/var/lib/mysql
   #    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
 
-  web:
+  gunicorn:
     build:
       context: ./
       dockerfile: Dockerfile
@@ -27,10 +27,27 @@ services:
     ports:
       - "80:8000"
     networks:
-      - test_net
+      - web_net
+    volumes:
+      - static:/static
     restart: always
     depends_on:
       - db
 
+
+  nginx:
+    image: nginx:stable
+    volumes:
+      - ./deploy/nginx/default.conf:/etc/nginx/nginx.conf:ro
+      - static:/static
+    ports:
+      - "80:80"
+    networks:
+      - web_net
+    depends_on:
+      - gunicorn
+
 networks:
-  test_net:
+  web_net:
+volumes:
+  static:
